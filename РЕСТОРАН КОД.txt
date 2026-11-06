@@ -1,0 +1,902 @@
+﻿<!--
+╔══════════════════════════════════════════════════════════════════════╗
+║  ПРЕМИАЛЬНЫЙ САЙТ-РЕСТОРАН ДЛЯ TILDA (блок T123)                    ║
+║  Версия: 1.0                                                         ║
+║                                                                      ║
+║  КАК УСТАНОВИТЬ В TILDA:                                              ║
+║  1. Откройте проект Tilda → Создать новую страницу                   ║
+║  2. Добавьте блок "T123" (HTML-код) из категории "Другое"            ║
+║  3. Вставьте ВЕСЬ этот код в окно блока                              ║
+║  4. Нажмите "Сохранить" → страница готова                            ║
+║                                                                      ║
+║  КАК МЕНЯТЬ ФОТО И ЦЕНЫ (читайте раздел ⚙️ НИЖЕ):                    ║
+║  → Найдите строку "const MENU = ["                                   ║
+║  → Меняйте значения в кавычках и цифры                               ║
+║  → Сохраните — изменения появятся на сайте                           ║
+╚══════════════════════════════════════════════════════════════════════╝
+-->
+
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   СТИЛИ САЙТА (можно не трогать — только если хотите сменить цвета)
+   ═══════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+
+.rs-root * { box-sizing: border-box; margin: 0; padding: 0; }
+
+
+.rs-root {
+  --rs-bg: #0a0a0a;
+  --rs-surface: #141414;
+  --rs-surface-2: #1c1c1c;
+  --rs-gold: #c9a96e;
+  --rs-gold-light: #e0c896;
+  --rs-text: #f5f1ea;
+  --rs-muted: #8a8a8a;
+  --rs-border: rgba(201, 169, 110, 0.18);
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--rs-bg);
+  color: var(--rs-text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+
+.rs-container { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+
+
+/* ─── HERO ─── */
+.rs-hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: radial-gradient(ellipse at center, #1a1410 0%, #0a0a0a 70%);
+  text-align: center;
+  padding: 80px 32px;
+  overflow: hidden;
+}
+.rs-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34d4?w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.18;
+  filter: grayscale(0.3) contrast(1.1);
+}
+.rs-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10,10,10,0.4) 0%, rgba(10,10,10,0.8) 100%);
+}
+.rs-hero-content { position: relative; z-index: 2; max-width: 900px; }
+.rs-hero-ornament {
+  font-size: 28px;
+  letter-spacing: 12px;
+  color: var(--rs-gold);
+  margin-bottom: 24px;
+  font-family: 'Playfair Display', serif;
+}
+.rs-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(48px, 8vw, 104px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  margin-bottom: 24px;
+  color: var(--rs-text);
+}
+.rs-hero h1 .accent {
+  color: var(--rs-gold);
+  font-style: italic;
+  font-weight: 500;
+}
+.rs-hero-tagline {
+  font-size: clamp(15px, 1.8vw, 19px);
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--rs-muted);
+  margin-bottom: 48px;
+  font-weight: 300;
+}
+.rs-hero-divider {
+  width: 80px;
+  height: 1px;
+  background: var(--rs-gold);
+  margin: 0 auto 48px;
+  position: relative;
+}
+.rs-hero-divider::before,
+.rs-hero-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  background: var(--rs-gold);
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+.rs-hero-divider::before { left: -16px; }
+.rs-hero-divider::after { right: -16px; }
+.rs-hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 44px;
+  border: 1px solid var(--rs-gold);
+  color: var(--rs-gold);
+  text-decoration: none;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.rs-hero-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--rs-gold);
+  transform: translateY(101%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+.rs-hero-cta:hover { color: var(--rs-bg); }
+.rs-hero-cta:hover::before { transform: translateY(0); }
+.rs-hero-cta span { position: relative; z-index: 1; }
+.rs-scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--rs-muted);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  z-index: 2;
+  animation: rs-bounce 2.4s ease-in-out infinite;
+}
+@keyframes rs-bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+  50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
+}
+
+
+/* ─── СЕКЦИЯ "О НАС" ─── */
+.rs-about {
+  padding: 120px 32px;
+  text-align: center;
+  background: var(--rs-surface);
+  position: relative;
+}
+.rs-about-label {
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--rs-gold);
+  margin-bottom: 24px;
+}
+.rs-about h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 400;
+  margin-bottom: 32px;
+  line-height: 1.2;
+}
+.rs-about h2 em { color: var(--rs-gold); font-style: italic; }
+.rs-about-text {
+  max-width: 720px;
+  margin: 0 auto;
+  font-size: 17px;
+  color: var(--rs-muted);
+  line-height: 1.9;
+  font-weight: 300;
+}
+.rs-about-stats {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  margin-top: 64px;
+  flex-wrap: wrap;
+}
+.rs-stat { text-align: center; }
+.rs-stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  color: var(--rs-gold);
+  font-weight: 500;
+  line-height: 1;
+}
+.rs-stat-label {
+  font-size: 12px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--rs-muted);
+  margin-top: 8px;
+}
+
+
+/* ─── МЕНЮ ─── */
+.rs-menu-section {
+  padding: 120px 32px;
+  background: var(--rs-bg);
+}
+.rs-menu-header { text-align: center; margin-bottom: 64px; }
+.rs-menu-label {
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--rs-gold);
+  margin-bottom: 16px;
+}
+.rs-menu-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 400;
+}
+.rs-menu-header h2 em { color: var(--rs-gold); font-style: italic; }
+
+
+.rs-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 64px;
+  flex-wrap: wrap;
+}
+.rs-tab {
+  padding: 14px 28px;
+  background: transparent;
+  border: 1px solid var(--rs-border);
+  color: var(--rs-muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  border-radius: 2px;
+}
+.rs-tab:hover { color: var(--rs-text); border-color: var(--rs-gold); }
+.rs-tab.active {
+  background: var(--rs-gold);
+  color: var(--rs-bg);
+  border-color: var(--rs-gold);
+}
+
+
+.rs-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 32px;
+}
+.rs-dish {
+  background: var(--rs-surface);
+  border: 1px solid var(--rs-border);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(30px);
+  animation: rs-fade-up 0.7s ease forwards;
+}
+.rs-dish:nth-child(2) { animation-delay: 0.08s; }
+.rs-dish:nth-child(3) { animation-delay: 0.16s; }
+.rs-dish:nth-child(4) { animation-delay: 0.24s; }
+.rs-dish:nth-child(5) { animation-delay: 0.32s; }
+.rs-dish:nth-child(6) { animation-delay: 0.4s; }
+@keyframes rs-fade-up { to { opacity: 1; transform: translateY(0); } }
+
+
+.rs-dish:hover {
+  transform: translateY(-8px);
+  border-color: var(--rs-gold);
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,169,110,0.3);
+}
+.rs-dish-img-wrap {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--rs-surface-2);
+}
+.rs-dish-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.rs-dish:hover .rs-dish-img { transform: scale(1.08); }
+.rs-dish-img-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(10,10,10,0.6) 100%);
+}
+.rs-dish-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  padding: 6px 14px;
+  background: rgba(10,10,10,0.85);
+  border: 1px solid var(--rs-gold);
+  color: var(--rs-gold);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  z-index: 2;
+  backdrop-filter: blur(6px);
+}
+.rs-dish-body { padding: 28px; }
+.rs-dish-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.rs-dish-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--rs-text);
+  line-height: 1.3;
+}
+.rs-dish-price {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--rs-gold);
+  white-space: nowrap;
+}
+.rs-dish-price .currency {
+  font-size: 15px;
+  font-weight: 400;
+  margin-left: 2px;
+  opacity: 0.85;
+}
+.rs-dish-desc {
+  font-size: 14px;
+  color: var(--rs-muted);
+  line-height: 1.7;
+  font-weight: 300;
+}
+.rs-dish-weight {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--rs-border);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rs-muted);
+}
+
+
+/* ─── ГАЛЕРЕЯ ─── */
+.rs-gallery {
+  padding: 120px 32px;
+  background: var(--rs-surface);
+}
+.rs-gallery-header { text-align: center; margin-bottom: 64px; }
+.rs-gallery-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 400;
+}
+.rs-gallery-header h2 em { color: var(--rs-gold); font-style: italic; }
+.rs-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.rs-gallery-grid img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 4px;
+  transition: all 0.5s ease;
+  filter: grayscale(0.2) brightness(0.9);
+  cursor: pointer;
+}
+.rs-gallery-grid img:hover {
+  filter: grayscale(0) brightness(1);
+  transform: scale(1.02);
+}
+
+
+/* ─── РЕЗЕРВ / КОНТАКТЫ ─── */
+.rs-reserve {
+  padding: 140px 32px;
+  text-align: center;
+  background:
+    linear-gradient(rgba(10,10,10,0.85), rgba(10,10,10,0.92)),
+    url('https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+.rs-reserve-label {
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--rs-gold);
+  margin-bottom: 24px;
+}
+.rs-reserve h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 400;
+  margin-bottom: 32px;
+  line-height: 1.1;
+}
+.rs-reserve h2 em { color: var(--rs-gold); font-style: italic; }
+.rs-reserve-sub {
+  font-size: 17px;
+  color: var(--rs-muted);
+  max-width: 560px;
+  margin: 0 auto 48px;
+  font-weight: 300;
+  line-height: 1.8;
+}
+.rs-reserve-phone {
+  display: inline-block;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 44px);
+  color: var(--rs-gold);
+  text-decoration: none;
+  margin-bottom: 48px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+}
+.rs-reserve-phone:hover { border-color: var(--rs-gold); }
+.rs-reserve-info {
+  display: flex;
+  justify-content: center;
+  gap: 64px;
+  flex-wrap: wrap;
+  color: var(--rs-muted);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+}
+.rs-reserve-info-item { display: flex; flex-direction: column; gap: 6px; }
+.rs-reserve-info-item .label {
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--rs-gold);
+}
+.rs-reserve-info-item .value { font-size: 15px; color: var(--rs-text); }
+
+
+/* ─── FOOTER ─── */
+.rs-footer {
+  padding: 48px 32px;
+  background: #050505;
+  text-align: center;
+  border-top: 1px solid var(--rs-border);
+}
+.rs-footer-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  color: var(--rs-gold);
+  margin-bottom: 12px;
+  letter-spacing: 0.15em;
+}
+.rs-footer-text {
+  font-size: 12px;
+  color: var(--rs-muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+
+/* ─── АДАПТИВ ─── */
+@media (max-width: 768px) {
+  .rs-container { padding: 0 20px; }
+  .rs-about-stats { gap: 40px; }
+  .rs-stat-num { font-size: 36px; }
+  .rs-gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .rs-menu-grid { grid-template-columns: 1fr; }
+  .rs-reserve-info { gap: 32px; }
+  .rs-reserve { background-attachment: scroll; }
+}
+</style>
+
+
+<div class="rs-root" id="rs-app">
+
+
+  <!-- ═══ HERO ═══ -->
+  <section class="rs-hero">
+    <div class="rs-hero-content">
+      <div class="rs-hero-ornament">✦ ✦ ✦</div>
+      <h1>Lumière<br><span class="accent">Fine Dining</span></h1>
+      <p class="rs-hero-tagline">Авторская кухня · Алматы</p>
+      <div class="rs-hero-divider"></div>
+      <a href="#menu" class="rs-hero-cta"><span>Смотреть меню</span></a>
+    </div>
+    <div class="rs-scroll-hint">Листайте вниз ↓</div>
+  </section>
+
+
+  <!-- ═══ О НАС ═══ -->
+  <section class="rs-about">
+    <div class="rs-about-label">Добро пожаловать</div>
+    <h2>Гастрономия как <em>искусство</em></h2>
+    <p class="rs-about-text" id="rs-about-text">
+      Мы создаём блюда, в которых каждый ингредиент имеет значение. Шеф-повар с 15-летним опытом работы в мишленовских ресторанах Европы сочетает классические техники и казахские традиции. Свежие локальные продукты, авторские соусы и подача, которая восхищает глаз прежде, чем вкус.
+    </p>
+    <div class="rs-about-stats">
+      <div class="rs-stat"><div class="rs-stat-num">15+</div><div class="rs-stat-label">Лет опыта</div></div>
+      <div class="rs-stat"><div class="rs-stat-num">120</div><div class="rs-stat-label">Блюд в меню</div></div>
+      <div class="rs-stat"><div class="rs-stat-num">4.9</div><div class="rs-stat-label">Рейтинг гостей</div></div>
+    </div>
+  </section>
+
+
+  <!-- ═══ МЕНЮ ═══ -->
+  <section class="rs-menu-section" id="menu">
+    <div class="rs-menu-header">
+      <div class="rs-menu-label">Наше меню</div>
+      <h2>Выберите <em>категорию</em></h2>
+    </div>
+    <div class="rs-tabs" id="rs-tabs"></div>
+    <div class="rs-container">
+      <div class="rs-menu-grid" id="rs-menu-grid"></div>
+    </div>
+  </section>
+
+
+  <!-- ═══ ГАЛЕРЕЯ ═══ -->
+  <section class="rs-gallery">
+    <div class="rs-gallery-header">
+      <h2>Атмосфера <em>ресторана</em></h2>
+    </div>
+    <div class="rs-gallery-grid" id="rs-gallery"></div>
+  </section>
+
+
+  <!-- ═══ РЕЗЕРВ ═══ -->
+  <section class="rs-reserve">
+    <div class="rs-reserve-label">Бронирование</div>
+    <h2>Забронируйте <em>столик</em></h2>
+    <p class="rs-reserve-sub" id="rs-reserve-sub">
+      Проведите вечер в атмосфере уюта и тонкого вкуса. Бронь по телефону — мы подберём идеальный столик для вас и ваших гостей.
+    </p>
+    <a href="tel:+77771234567" class="rs-reserve-phone" id="rs-reserve-phone">+7 777 123 45 67</a>
+    <div class="rs-reserve-info" id="rs-reserve-info"></div>
+  </section>
+
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="rs-footer">
+    <div class="rs-footer-name" id="rs-footer-name">LUMIÈRE</div>
+    <div class="rs-footer-text">© 2026 · Fine Dining Restaurant</div>
+  </footer>
+
+
+</div>
+
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   ⚙️  ЗДЕСЬ ВЫ РЕДАКТИРУЕТЕ ВСЁ — ФОТО, ЦЕНЫ, НАЗВАНИЯ, ТЕЛЕФОН
+   ═══════════════════════════════════════════════════════════════════
+
+
+   ★ Как поменять ЦЕНУ:
+     Найдите "price:" и замените число (БЕЗ кавычек).
+     Пример:  price: 4500  →  price: 5200
+
+
+   ★ Как поменять ФОТО блюда:
+     Найдите "photo:" и замените ссылку в кавычках.
+     Ссылку можно взять из интернета (правый клик по картинке → "Копировать адрес изображения")
+     или загрузить фото в Tilda (Файлы → скопировать ссылку).
+     Пример:  photo: "https://..."  →  photo: "https://ваша-новая-ссылка.jpg"
+
+
+   ★ Как добавить НОВОЕ БЛЮДО:
+     Скопируйте один блок { ... } целиком (вместе с запятой) и вставьте ниже.
+     Затем заполните поля своими данными.
+
+
+   ★ Как УДАЛИТЬ блюдо:
+     Просто удалите весь блок { ... } вместе с запятой.
+═══════════════════════════════════════════════════════════════════ */
+
+
+const RESTAURANT = {
+  name: "Lumière",
+  phone: "+7 777 123 45 67",
+  phoneLink: "+77771234567",
+  address: "Алматы, ул. Абая 150",
+  hours: "Ежедневно · 12:00 — 23:00",
+  currency: "₸"
+};
+
+
+const MENU = [
+  // ─────────── КАТЕГОРИЯ 1: ЗАКУСКИ ───────────
+  {
+    category: "Закуски",
+    items: [
+      {
+        name: "Карпаччо из тунца",
+        desc: "Свежий тунец, руккола, пармезан, каперсы, лимонное масло",
+        price: 4500,
+        weight: "120 г",
+        badge: "Хит",
+        photo: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=85"
+      },
+      {
+        name: "Брускетта с трюфелем",
+        desc: "Хрустящий багет, крем-сыр, чёрный трюфель, мёд, тимьян",
+        price: 3200,
+        weight: "180 г",
+        badge: "",
+        photo: "https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?w=800&q=85"
+      },
+      {
+        name: "Камамбер запечённый",
+        desc: "Камамбер, грецкий орех, мёд, клюквенный соус, багет",
+        price: 3800,
+        weight: "200 г",
+        badge: "Новинка",
+        photo: "https://images.unsplash.com/photo-1638786675038-2fa1f3bd8bd2?w=800&q=85"
+      },
+      {
+        name: "Тартар из говядины",
+        desc: "Филе миньон, лук-шалот, каперсы, перепелиное яйцо, горчица",
+        price: 4900,
+        weight: "140 г",
+        badge: "",
+        photo: "https://images.unsplash.com/photo-1626804475297-41608ea09aeb?w=800&q=85"
+      }
+    ]
+  },
+
+
+  // ─────────── КАТЕГОРИЯ 2: ОСНОВНЫЕ БЛЮДА ───────────
+  {
+    category: "Основные блюда",
+    items: [
+      {
+        name: "Рибай-стейк сухого вызревания",
+        desc: "Стейк 28 дней вызревания, масло с травами, картофель дофин",
+        price: 12500,
+        weight: "350 г",
+        badge: "Шеф",
+        photo: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&q=85"
+      },
+      {
+        name: "Сибас на углях",
+        desc: "Целый сибас, фенхель, лимон, соус бер-блан, руккола",
+        price: 8900,
+        weight: "320 г",
+        badge: "",
+        photo: "https://images.unsplash.com/photo-1519708227418-c8fd905529bb?w=800&q=85"
+      },
+      {
+        name: "Утиная грудка магре",
+        desc: "Утиная грудка, вишнёвый соус, пюре из сельдерея, карамелизированный лук",
+        price: 7200,
+        weight: "280 г",
+        badge: "",
+        photo: "https://images.unsplash.com/photo-1544025162-7d6578e8996f?w=800&q=85"
+      },
+      {
+        name: "Ризотто с белыми грибами",
+        desc: "Карнароли, белые грибы, пармезан, трюфельное масло, петрушка",
+        price: 5800,
+        weight: "300 г",
+        badge: "Вегетарианское",
+        photo: "https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=800&q=85"
+      },
+      {
+        name: "Баранина на кости",
+        desc: "Каре ягнёнка, розмарин, чеснок, овощи гриль, соус жус",
+        price: 9800,
+        weight: "340 г",
+        badge: "",
+        photo: "https://images.unsplash.com/photo-1607330289024-1535e6ddfac3?w=800&q=85"
+      },
+      {
+        name: "Паста тальятелле с лобстером",
+        desc: "Свежая паста, мясо лобстера, коньяк, сливки, томаты черри",
+        price: 11500,
+        weight: "310 г",
+        badge: "Премиум",
+        photo: "https://images.unsplash.com/photo-1563379926898-05f4575a45d6?w=800&q=85"
+      }
+    ]
+  },
+
+
+  // ─────────── КАТЕГОРИЯ 3: ДЕСЕРТЫ ───────────
+  {
+    category: "Десерты",
+    items: [
+      {
+        name: "Фондан шоколадный",
+        desc: "Тёплый шоколад, жидкая сердцевина, ванильное мороженое, малина",
+        price: 2900,
+        weight: "150 г",
+        badge: "Хит",
+        photo: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=800&q=85"
+      },
+      {
+        name: "Тирамису классический",
+        desc: "Маскарпоне, савоярди, эспрессо, какао, марсала",
+        price: 2600,
+        weight: "160 г",
+        badge: "",
+        photo: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&q=85"
+      },
+      {
+        name: "Крем-брюле ванильное",
+        desc: "Ваниль Бурбон, карамельная корочка, свежие ягоды",
+        price: 2400,
+        weight: "140 г",
+        badge: "",
+        photo: "https://images.unsplash.com/photo-1470124182917-cc6e71b22ecc?w=800&q=85"
+      },
+      {
+        name: "Чизкейк Нью-Йорк",
+        desc: "Сливочный сыр, песочная основа, соус из манго",
+        price: 2500,
+        weight: "170 г",
+        badge: "",
+        photo: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=800&q=85"
+      }
+    ]
+  },
+
+
+  // ─────────── КАТЕГОРИЯ 4: НАПИТКИ ───────────
+  {
+    category: "Напитки",
+    items: [
+      {
+        name: "Авторский лимонад",
+        desc: "Базилик, огурец, лайм, мёд, газированная вода",
+        price: 1800,
+        weight: "400 мл",
+        badge: "",
+        photo: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800&q=85"
+      },
+      {
+        name: "Свежевыжатый сок",
+        desc: "Апельсин, грейпфрут, яблоко, сельдерей — на выбор",
+        price: 1500,
+        weight: "300 мл",
+        badge: "",
+        photo: "https://images.unsplash.com/photo-1613478223719-2ab1b87bbf39?w=800&q=85"
+      },
+      {
+        name: "Капучино на овсяном",
+        desc: "Эспрессо, взбитое овсяное молоко, корица",
+        price: 1200,
+        weight: "200 мл",
+        badge: "",
+        photo: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=800&q=85"
+      },
+      {
+        name: "Глинтвейн классический",
+        desc: "Красное вино, апельсин, корица, гвоздика, бадьян",
+        price: 2200,
+        weight: "250 мл",
+        badge: "Сезонное",
+        photo: "https://images.unsplash.com/photo-1546171753-97d7676e4602?w=800&q=85"
+      }
+    ]
+  }
+];
+
+
+// Фотографии для галереи (можно заменить ссылки на свои)
+const GALLERY = [
+  "https://images.unsplash.com/photo-1517248135467-4c7edcad34d4?w=600&q=85",
+  "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&q=85",
+  "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=85",
+  "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=600&q=85",
+  "https://images.unsplash.com/photo-1466978913421-dad2ebd01d19?w=600&q=85",
+  "https://images.unsplash.com/photo-1528605245334-90d0885b78f7?w=600&q=85",
+  "https://images.unsplash.com/photo-1551218808-94e33e0846d9?w=600&q=85",
+  "https://images.unsplash.com/photo-1537047687816-3c6c3a3b4c75?w=600&q=85"
+];
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   🚀 НИЖЕ — КОД ОТРИСОВКИ. НЕ ТРОГАЙТЕ, ЕСЛИ НЕ ЗНАЕТЕ ЧТО ДЕЛАЕТЕ.
+   ═══════════════════════════════════════════════════════════════════ */
+(function() {
+  const grid = document.getElementById('rs-menu-grid');
+  const tabsEl = document.getElementById('rs-tabs');
+  let activeCat = MENU[0].category;
+
+
+  function fmtPrice(p) {
+    return p.toLocaleString('ru-RU') + '<span class="currency">' + RESTAURANT.currency + '</span>';
+  }
+
+
+  function renderTabs() {
+    tabsEl.innerHTML = '';
+    MENU.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'rs-tab' + (cat.category === activeCat ? ' active' : '');
+      btn.textContent = cat.category;
+      btn.onclick = () => { activeCat = cat.category; renderTabs(); renderDishes(); };
+      tabsEl.appendChild(btn);
+    });
+  }
+
+
+  function renderDishes() {
+    grid.innerHTML = '';
+    const cat = MENU.find(c => c.category === activeCat);
+    if (!cat) return;
+    cat.items.forEach((dish, i) => {
+      const card = document.createElement('article');
+      card.className = 'rs-dish';
+      card.style.animationDelay = (i * 0.08) + 's';
+      const badge = dish.badge ? '<div class="rs-dish-badge">' + dish.badge + '</div>' : '';
+      card.innerHTML =
+        '<div class="rs-dish-img-wrap">' +
+          badge +
+          '<img class="rs-dish-img" src="' + dish.photo + '" alt="' + dish.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=85\'">' +
+        '</div>' +
+        '<div class="rs-dish-body">' +
+          '<div class="rs-dish-head">' +
+            '<h3 class="rs-dish-name">' + dish.name + '</h3>' +
+            '<div class="rs-dish-price">' + fmtPrice(dish.price) + '</div>' +
+          '</div>' +
+          '<p class="rs-dish-desc">' + dish.desc + '</p>' +
+          (dish.weight ? '<div class="rs-dish-weight">' + dish.weight + '</div>' : '') +
+        '</div>';
+      grid.appendChild(card);
+    });
+  }
+
+
+  function renderGallery() {
+    const g = document.getElementById('rs-gallery');
+    GALLERY.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.loading = 'lazy';
+      g.appendChild(img);
+    });
+  }
+
+
+  function renderReserve() {
+    document.getElementById('rs-reserve-phone').href = 'tel:' + RESTAURANT.phoneLink;
+    document.getElementById('rs-reserve-phone').textContent = RESTAURANT.phone;
+    document.getElementById('rs-reserve-info').innerHTML =
+      '<div class="rs-reserve-info-item"><div class="label">Адрес</div><div class="value">' + RESTAURANT.address + '</div></div>' +
+      '<div class="rs-reserve-info-item"><div class="label">Часы работы</div><div class="value">' + RESTAURANT.hours + '</div></div>' +
+      '<div class="rs-reserve-info-item"><div class="label">Телефон</div><div class="value">' + RESTAURANT.phone + '</div></div>';
+    document.getElementById('rs-footer-name').textContent = RESTAURANT.name.toUpperCase();
+  }
+
+
+  renderTabs();
+  renderDishes();
+  renderGallery();
+  renderReserve();
+})();
+</script>
